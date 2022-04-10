@@ -248,6 +248,14 @@ func (proxy *ProxyHttpServer) handleHttps(w http.ResponseWriter, r *http.Request
 					resp, err = ctx.RoundTrip(req)
 					if err != nil {
 						ctx.Warnf("Cannot read TLS response from mitm'd server %v", err)
+						resp = &http.Response{Request: req, StatusCode: 512, Header: make(http.Header)}
+						oe, ok := err.(*net.OpError)
+						if ok {
+							resp.Status = oe.Op
+						} else {
+							resp.Status = err.Error()
+						}
+						resp = proxy.filterResponse(resp, ctx)
 						return
 					}
 					ctx.Logf("resp %v", resp.Status)
