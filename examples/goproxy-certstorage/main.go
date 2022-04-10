@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"github.com/elazarl/goproxy"
+	"github.com/daudcanugerah/goproxy"
 	"log"
 	"net/http"
 )
